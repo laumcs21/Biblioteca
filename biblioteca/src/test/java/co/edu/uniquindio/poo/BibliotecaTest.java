@@ -163,6 +163,23 @@ public class BibliotecaTest {
         LOG.info("Fin de prueba registrarEquipo...");
     
     }
+
+    @Test
+    public void BuscarLibrosCDPorNombreYFormatoCorrecto() {
+        LOG.info("Inicio de prueba datos completos...");
+        // Almacenar los datos de prueba La magia del saber |carrera 15 #18 norte-35|36000|2023-08-28
+        Biblioteca biblioteca = new Biblioteca("La Magia del Saber","carrera 15 #18 norte-35", (int)36000, LocalDate.of(2023, 8, 28));
+        Autor autor = new Autor ("Juan Perez", "123", "colombiano");
+        Editorial editorial = new Editorial ("Libros volando", "345", "456");
+        LibrosCD libro = new LibrosCD ("solos", autor, editorial, LocalDate.of(2005,9,10), (int)198, "123","PDF"); 
+        
+        biblioteca.registrarLibrosCD(libro);
+
+        assertTrue(biblioteca.buscarLibrosCD("solos","PDF").isPresent());
+        assertEquals(libro, biblioteca.buscarLibrosCD("solos","PDF").get());
+        LOG.info("Fin de prueba registrarEquipo...");
+    
+    }
  /*
     @Test
     public void buscarLibrosDigitalesEImpresosCorrecto() {

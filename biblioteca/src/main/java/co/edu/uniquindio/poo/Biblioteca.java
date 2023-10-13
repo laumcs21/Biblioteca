@@ -9,9 +9,9 @@
 package co.edu.uniquindio.poo;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -126,7 +126,7 @@ public class Biblioteca{
         
     }
     
-      public List<Libros> buscarLibrosPorAutor(String nombreAutor) {
+      public List<Libros> buscarLibrosPorAutor1(String nombreAutor) {
        Predicate<LibrosDigitales> nombreDigital = librosDigitales -> librosDigitales.getNombre().equals(nombreAutor);
        Predicate<LibrosImpresos> nombreImpreso = librosImpresos -> librosImpresos.getNombre().equals(nombreAutor);
        Predicate<LibrosCD> nombreCD = librosCD -> librosCD.getNombre().equals(nombreAutor);
@@ -146,31 +146,47 @@ public class Biblioteca{
 
        return LibrosporAutor;
       }
-      public List<Libros> buscarLibrosCD(String nombreLibro, String formatoLibro) {
+
+      public Optional<LibrosCD> buscarLibrosCD(String nombreLibro, String formatoLibro) {
          Predicate<LibrosCD> nombreCD = librosCD -> librosCD.getNombre().equals(nombreLibro);
          Predicate<LibrosCD> formatoCD = librosCD -> librosCD.getFormato().equals(formatoLibro);
-     
-         List<Libros> libros = LibrosCDList.stream()
-                 .filter(nombreCD.and(formatoCD))
-                 .collect(Collectors.toList());
-     
-         return libros;
-     }
-   }
-/* 
+         Optional<LibrosCD> LibroCDEncontrado = LibrosCDList.stream()
+         .filter(nombreCD.and(formatoCD))
+         .findAny();
+
+       return LibroCDEncontrado;
+      }
+
+
     public List<Libros> buscarLibrosPorAutor(String nombreAutor) {
       List<Libros> librosAutor = new ArrayList<>();
-      for (Libros libro : LibrosList) {
-          if (libro.getAutor().getnombre().equals(nombreAutor)) {
-              librosAutor.add(libro);}
 
-          if (librosAutor.isEmpty()) {
-               System.out.println("No se encuentran libros con el nombre del autor");
-           }
-      }
-      return librosAutor;
-  }
-
+      for (Libros libro : LibrosCDList) {
+         if (libro.getAutor().getnombre().equals(nombreAutor)) {
+             librosAutor.add(libro);
+         }
+     }
+ 
+     for (Libros libro : LibrosDigitalesList) {
+         if (libro.getAutor().getnombre().equals(nombreAutor)) {
+             librosAutor.add(libro);
+         }
+     }
+ 
+     for (Libros libro : LibrosImpresosList) {
+         if (libro.getAutor().getnombre().equals(nombreAutor)) {
+             librosAutor.add(libro);
+         }
+     }
+ 
+     if (librosAutor.isEmpty()) {
+         System.out.println("No se encuentran libros con el nombre del autor");
+     }
+ 
+     return librosAutor;
+ }
+}
+/*
    public List<Libros> buscarLibrosDigitalesEImpresos(String nombreLibro){
     Predicate<Libros> nombreDigital = librosDigitales->librosDigitales.getNombre().equals(nombreLibro);
     Predicate<Libros> nombreImpreso = librosImpresos->librosImpresos.getNombre().equals(nombreLibro);
@@ -190,7 +206,6 @@ public class Biblioteca{
    }
 */
 
-}
 
 
 
