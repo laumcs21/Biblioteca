@@ -185,6 +185,31 @@ public class Biblioteca{
  
      return librosAutor;
  }
+
+   public List<Integer> contarTiposLibrosPorAutor(String nombreAutor) {
+        int cantidadImpresos = 0;
+        int cantidadDigitales = 0;
+        int cantidadCD = 0;
+
+        for (Libro libro : libros) {
+            if (libro.getAutor().equals(nombreAutor)) {
+                if (libro instanceof LibroImpreso && libro.esImpreso()) {
+                    cantidadImpresos++;
+                } else if (libro instanceof LibroDigital && libro.esDigital()) {
+                    cantidadDigitales++;
+                } else if (libro instanceof LibroCD && libro.esCD()) {
+                    cantidadCD++;
+                }
+            }
+        }
+
+        List<Integer> resultado = new LinkedList<>();
+        resultado.add(cantidadImpresos);
+        resultado.add(cantidadDigitales);
+        resultado.add(cantidadCD);
+
+        return resultado;
+    }
 }
 /*
    public List<Libros> buscarLibrosDigitalesEImpresos(String nombreLibro){
