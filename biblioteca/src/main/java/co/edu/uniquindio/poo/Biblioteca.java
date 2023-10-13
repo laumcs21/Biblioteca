@@ -188,29 +188,26 @@ public class Biblioteca{
 
 // 5. Dado el nombre de un autor indicar cuantos tipos tiene (retornar lista con 3 valores) metodo que busque cantidad por tipo
     
-   public List<Integer> contarTiposLibrosPorAutor(String nombreAutor) {
-        int cantidadImpresos = 0;
-        int cantidadDigitales = 0;
-        int cantidadCD = 0;
+    public int contarTiposLibrosPorAutor(String nombreAutor) {
+        long cantidadImpresos = libros.stream()
+                .filter(libro -> libro.getAutor().getNombre().equals(nombreAutor) && libro.esImpreso())
+                .count();
 
-        for (Libro libro : libros) {
-            if (libro.getAutor().equals(nombreAutor)) {
-                if (libro instanceof LibroImpreso && libro.esImpreso()) {
-                    cantidadImpresos++;
-                } else if (libro instanceof LibroDigital && libro.esDigital()) {
-                    cantidadDigitales++;
-                } else if (libro instanceof LibroCD && libro.esCD()) {
-                    cantidadCD++;
-                }
-            }
-        }
+        long cantidadDigitales = libros.stream()
+                .filter(libro -> libro.getAutor().getNombre().equals(nombreAutor) && libro.esDigital())
+                .count();
 
-        List<Integer> resultado = new LinkedList<>();
-        resultado.add(cantidadImpresos);
-        resultado.add(cantidadDigitales);
-        resultado.add(cantidadCD);
+        long cantidadCD = libros.stream()
+                .filter(libro -> libro.getAutor().getNombre().equals(nombreAutor) && libro.esCD())
+                .count();
 
-        return resultado;
+        
+         List<Integer> resultado = new ArrayList<>();
+         resultado.add((int) cantidadImpresos);
+         resultado.add((int) cantidadDigitales);
+         resultado.add((int) cantidadCD);
+      
+         return resultado;
     }
 }
 /*
