@@ -186,6 +186,8 @@ public class Biblioteca{
      return librosAutor;
  }
 
+// 5. Dado el nombre de un autor indicar cuantos tipos tiene (retornar lista con 3 valores) metodo que busque cantidad por tipo
+    
    public List<Integer> contarTiposLibrosPorAutor(String nombreAutor) {
         int cantidadImpresos = 0;
         int cantidadDigitales = 0;
