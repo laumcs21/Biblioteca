@@ -7,16 +7,14 @@
  * Licencia GNU/GPL V3.0 (https://raw.githubusercontent.com/grid-uq/poo/main/LICENSE) 
  */
 package co.edu.uniquindio.poo;
-
 import java.time.LocalDate;
-import java.util.Collection;
 
 public class LibrosCD extends Libros {
-     private final String tamaño;
-     private final String formato;
+    private String tamaño;
+    private String formato;
 
-    public LibrosCD(String nombre, Autor autor, Editorial editorial, LocalDate añoPublicacion, 
-    int cantidadPaginas, String tamaño, String formato) {
+    public LibrosCD(String nombre, Autor autor, Editorial editorial, LocalDate añoPublicacion,
+                    int cantidadPaginas, String tamaño, String formato) {
         super(nombre, autor, editorial, añoPublicacion, cantidadPaginas);
 
         assert tamaño != null;
@@ -30,7 +28,15 @@ public class LibrosCD extends Libros {
         return tamaño;
     }
 
+    public void setTamaño(String tamaño) {
+        this.tamaño = tamaño;
+    }
+
     public String getFormato() {
         return formato;
+    }
+
+    public void setFormato(String formato) {
+        this.formato = formato;
     }
 }
