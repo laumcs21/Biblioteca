@@ -43,7 +43,8 @@ public class Biblioteca{
         this.fechaCreacion = fechaCreacion;
         this.LibrosImpresosList = new LinkedList<>();
         this.LibrosCDList = new LinkedList<>();
-        this.LibrosDigitalesList = new LinkedList<>();        
+        this.LibrosDigitalesList = new LinkedList<>();  
+            
     }
   
      public String getnombre() {
@@ -61,7 +62,7 @@ public class Biblioteca{
      public LocalDate getfechaCreacion() {
         return this.fechaCreacion;
      }
-
+    // 1 Crear libros, no pueden existir 2 con el mismo nombre//
     /*Listado libros Impresos */
 
      public void registrarLibrosImpresos(LibrosImpresos libro) {
@@ -125,39 +126,7 @@ public class Biblioteca{
         return Collections.unmodifiableCollection(LibrosDigitalesList);
         
     }
-    
-      public List<Libros> buscarLibrosPorAutor1(String nombreAutor) {
-       Predicate<LibrosDigitales> nombreDigital = librosDigitales -> librosDigitales.getNombre().equals(nombreAutor);
-       Predicate<LibrosImpresos> nombreImpreso = librosImpresos -> librosImpresos.getNombre().equals(nombreAutor);
-       Predicate<LibrosCD> nombreCD = librosCD -> librosCD.getNombre().equals(nombreAutor);
-
-       List<Libros> LibrosporAutor = Stream.of(
-            LibrosDigitalesList.stream()
-                    .filter(nombreDigital)
-                    .collect(Collectors.toList()),
-            LibrosImpresosList.stream()
-                    .filter(nombreImpreso)
-                    .collect(Collectors.toList()),
-            LibrosCDList.stream()
-                    .filter(nombreCD)
-                    .collect(Collectors.toList()))
-         .flatMap(List::stream)
-         .collect(Collectors.toList());
-
-       return LibrosporAutor;
-      }
-
-      public Optional<LibrosCD> buscarLibrosCD(String nombreLibro, String formatoLibro) {
-         Predicate<LibrosCD> nombreCD = librosCD -> librosCD.getNombre().equals(nombreLibro);
-         Predicate<LibrosCD> formatoCD = librosCD -> librosCD.getFormato().equals(formatoLibro);
-         Optional<LibrosCD> LibroCDEncontrado = LibrosCDList.stream()
-         .filter(nombreCD.and(formatoCD))
-         .findAny();
-
-       return LibroCDEncontrado;
-      }
-
-
+  //2 Buscar libros por autor//
     public List<Libros> buscarLibrosPorAutor(String nombreAutor) {
       List<Libros> librosAutor = new ArrayList<>();
 
@@ -185,6 +154,48 @@ public class Biblioteca{
  
      return librosAutor;
  }
+ //3 Buscar libros Digitales que tambien tengan version Cd//
+    class LibrosDigitalesLibrosCD {
+    private Collection<LibrosDigitales> librosDigitales;
+    private Collection<LibrosCD> librosCD;
+
+    public LibrosDigitalesLibrosCD(Collection<LibrosDigitales> librosDigitales, Collection<LibrosCD> librosCD) {
+        this.librosDigitales = librosDigitales;
+        this.librosCD = librosCD;
+    }
+
+    public Collection<String> obtenerNombresComunes() {
+        Collection<String> librosComunes = new LinkedList<>();
+        for (LibrosDigitales libroDigital : librosDigitales) {
+            String nombreDigital = libroDigital.getNombre();
+            for (LibrosCD libroCD : librosCD) {
+                String nombreCD = libroCD.getNombre();
+                if (nombreDigital.equals(nombreCD)) {
+                    librosComunes.add(nombreDigital);
+                }
+            }
+        }
+        return librosComunes;
+    }}
+
+
+ 
+ 
+      
+
+//4 Buscar librosCD por nombre y formato//
+      public Optional<LibrosCD> buscarLibrosCD(String nombreLibro, String formatoLibro) {
+         Predicate<LibrosCD> nombreCD = librosCD -> librosCD.getNombre().equals(nombreLibro);
+         Predicate<LibrosCD> formatoCD = librosCD -> librosCD.getFormato().equals(formatoLibro);
+         Optional<LibrosCD> LibroCDEncontrado = LibrosCDList.stream()
+         .filter(nombreCD.and(formatoCD))
+         .findAny();
+
+       return LibroCDEncontrado;
+      }
+
+
+
 
 // 5. Dado el nombre de un autor indicar cuantos tipos tiene (retornar lista con 3 valores) metodo que busque cantidad por tipo
     
@@ -209,7 +220,7 @@ public class Biblioteca{
       
          return resultado;
     }
-}
+
 /*
    public List<Libros> buscarLibrosDigitalesEImpresos(String nombreLibro){
     Predicate<Libros> nombreDigital = librosDigitales->librosDigitales.getNombre().equals(nombreLibro);
