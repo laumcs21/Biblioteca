@@ -24,15 +24,15 @@ public class Autor {
       this.nacionalidad = nacionalidad;
    }
 
-   public String getnombre() {
+   public String getNombre() {
       return this.nombre;
    }
 
-   public String getidentificacion() {
+   public String getIdentificacion() {
       return this.identificacion;
    }
 
-   public String getnacionalidad() {
+   public String getNacionalidad() {
       return this.nacionalidad;
    }
 
