@@ -180,6 +180,27 @@ public class BibliotecaTest {
         LOG.info("Fin de prueba registrarEquipo...");
     
     }
+
+    @Test
+    public void testContarTiposLibrosPorAutor() {
+        // Crea una biblioteca
+        Biblioteca biblioteca = new Biblioteca("Mi Biblioteca", "Dirección", 100, LocalDate.now());
+
+        // Agrega algunos libros a la biblioteca (Impresos, Digitales y CDs)
+        biblioteca.registrarLibrosImpresos(new LibrosImpresos("Libro1", autor, editorial, LocalDate.now(), 200, (byte) 10));
+        biblioteca.registrarLibrosDigitales(new LibrosDigitales("Libro2", autor, editorial, LocalDate.now(), 300, "URL1"));
+        biblioteca.registrarLibrosCD(new LibrosCD("Libro3", autor, editorial, LocalDate.now(), 150, "700MB", "CD"));
+
+        // Realiza la prueba para contar los tipos de libros del autor
+        List<Integer> resultados = biblioteca.contarTiposLibrosPorAutor("NombreAutor");
+
+        // Comprueba los resultados
+        assertEquals(1, (int) resultados.get(0)); // Cantidad de libros impresos
+        assertEquals(1, (int) resultados.get(1)); // Cantidad de libros digitales
+        assertEquals(1, (int) resultados.get(2)); // Cantidad de libros CD
+    }
+}
+
  /*
     @Test
     public void buscarLibrosDigitalesEImpresosCorrecto() {
