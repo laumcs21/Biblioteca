@@ -34,10 +34,10 @@ public class BibliotecaTest {
 
 
         // Recuperación y verificación de datos
-        assertEquals("La Magia del Saber",biblioteca.getnombre());
-        assertEquals("carrera 15 #18 norte-35",biblioteca.getdireccion());
-        assertEquals((int)36000,biblioteca.getcantidadLibros());
-        assertEquals(LocalDate.of(2023, 8, 28),biblioteca.getfechaCreacion());
+        assertEquals("La Magia del Saber",biblioteca.getNombre());
+        assertEquals("carrera 15 #18 norte-35",biblioteca.getDireccion());
+        assertEquals((int)36000,biblioteca.getCantidadLibros());
+        assertEquals(LocalDate.of(2023, 8, 28),biblioteca.getFechaCreacion());
         
         LOG.info("Fin de prueba datos completos...");}
 
@@ -175,29 +175,43 @@ public class BibliotecaTest {
         
         biblioteca.registrarLibrosCD(libro);
 
-        assertTrue(biblioteca.buscarLibrosCD("solos","PDF").isPresent());
-        assertEquals(libro, biblioteca.buscarLibrosCD("solos","PDF").get());
+        assertEquals(libro, biblioteca.buscarLibrosCDPorNombreYFormato("solos","PDF").get(0));
         LOG.info("Fin de prueba registrarEquipo...");
     
+    }
+    @Test
+    public void buscarLibrosDigitalesConVersionCDCorrecto() {
+        LOG.info("Inicio de prueba datos completos...");
+        // Almacenar los datos de prueba La magia del saber |carrera 15 #18 norte-35|36000|2023-08-28
+        Biblioteca biblioteca = new Biblioteca("La Magia del Saber","carrera 15 #18 norte-35", (int)36000, LocalDate.of(2023, 8, 28));
+        Autor autor = new Autor ("Juan", "123", "colombiano");
+        Editorial editorial = new Editorial ("Libros volando", "345", "456");
+        LibrosCD libro1 = new LibrosCD ("solos", autor, editorial, LocalDate.of(2005,9,10), (int)198, "123","PDF"); 
+        LibrosDigitales libro2 = new LibrosDigitales ("solos", autor, editorial, LocalDate.of(2005,9,10), (int)198, "123"); 
+        
+        biblioteca.registrarLibrosCD(libro1);
+        biblioteca.registrarLibrosDigitales(libro2);
+    
+        assertEquals(1, biblioteca.buscarLibrosDigitalesConVersionCD().size());
+        LOG.info("Fin de prueba buscarLibrosDigitalesConVersionCD...");
     }
 
     @Test
     public void testContarTiposLibrosPorAutor() {
         // Crea una biblioteca
         Biblioteca biblioteca = new Biblioteca("Mi Biblioteca", "Dirección", 100, LocalDate.now());
-
+        Autor autor = new Autor ("Juan Perez", "123", "colombiano");
+        Editorial editorial = new Editorial ("Libros volando", "345", "456");
         // Agrega algunos libros a la biblioteca (Impresos, Digitales y CDs)
         biblioteca.registrarLibrosImpresos(new LibrosImpresos("Libro1", autor, editorial, LocalDate.now(), 200, (byte) 10));
         biblioteca.registrarLibrosDigitales(new LibrosDigitales("Libro2", autor, editorial, LocalDate.now(), 300, "URL1"));
         biblioteca.registrarLibrosCD(new LibrosCD("Libro3", autor, editorial, LocalDate.now(), 150, "700MB", "CD"));
 
-        // Realiza la prueba para contar los tipos de libros del autor
-        List<Integer> resultados = biblioteca.contarTiposLibrosPorAutor("NombreAutor");
 
         // Comprueba los resultados
-        assertEquals(1, (int) resultados.get(0)); // Cantidad de libros impresos
-        assertEquals(1, (int) resultados.get(1)); // Cantidad de libros digitales
-        assertEquals(1, (int) resultados.get(2)); // Cantidad de libros CD
+        assertEquals(1, biblioteca.contarTiposLibrosPorAutor("Juan Perez").get(0)); // Cantidad de libros impresos
+        assertEquals(1, biblioteca.contarTiposLibrosPorAutor("Juan Perez").get (1)); // Cantidad de libros digitales
+        assertEquals(1, biblioteca.contarTiposLibrosPorAutor("Juan Perez").get(2)); // Cantidad de libros CD
     }
 }
 
@@ -221,4 +235,3 @@ public class BibliotecaTest {
     
     }
     */
-}

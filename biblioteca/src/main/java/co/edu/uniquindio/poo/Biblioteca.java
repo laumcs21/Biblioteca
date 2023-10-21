@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Biblioteca {
@@ -22,7 +21,6 @@ public class Biblioteca {
     private String direccion;
     private int cantidadLibros;
     private LocalDate fechaCreacion;
-    private final Collection<Libros> libros;
     private final List<LibrosImpresos> librosImpresosList;
     private final List<LibrosCD> librosCDList;
     private final List<LibrosDigitales> librosDigitalesList;
@@ -37,7 +35,6 @@ public class Biblioteca {
         this.direccion = direccion;
         this.cantidadLibros = cantidadLibros;
         this.fechaCreacion = fechaCreacion;
-        this.libros = new LinkedList<>();
         this.librosImpresosList = new ArrayList<>();
         this.librosCDList = new ArrayList<>();
         this.librosDigitalesList = new ArrayList<>();
@@ -129,8 +126,8 @@ public class Biblioteca {
     public Collection<String> buscarLibrosDigitalesConVersionCD() {
         List<String> librosConVersionCD = new LinkedList<>();
 
-        for (Libros libroDigital : libros) {
-            for (Libros libroCD : libros) {
+        for (Libros libroDigital : librosDigitalesList) {
+            for (Libros libroCD : librosCDList) {
                 if (libroDigital.getNombre().equals(libroCD.getNombre()) && libroDigital instanceof LibrosDigitales && libroCD instanceof LibrosCD) {
                     librosConVersionCD.add(libroDigital.getNombre());
                     break;  // No es necesario seguir buscando para este libro digital
@@ -141,24 +138,28 @@ public class Biblioteca {
         return librosConVersionCD;
     }
 
-    public Optional<LibrosCD> buscarLibrosCD(String nombreLibro, String formatoLibro) {
-        return libros.stream()
-                .filter(libros -> libros instanceof LibrosCD)
-                .map(libros -> (LibrosCD) libros)
-                .filter(libroCD -> libroCD.getNombre().equals(nombreLibro) && libroCD.getFormato().equals(formatoLibro))
-                .findAny();
+    public List<LibrosCD> buscarLibrosCDPorNombreYFormato(String nombre, String formato) {
+        List<LibrosCD> librosEncontrados = new ArrayList<>();
+    
+        for (LibrosCD libroCD : librosCDList) {
+            if (libroCD.getNombre().equals(nombre) && libroCD.getFormato().equals(formato)) {
+                librosEncontrados.add(libroCD);
+            }
+        }
+    
+        return librosEncontrados;
     }
 
     public List<Integer> contarTiposLibrosPorAutor(String nombreAutor) {
-        int cantidadImpresos = (int) libros.stream()
+        int cantidadImpresos = (int) librosImpresosList.stream()
                 .filter(libro -> libro.getAutor().getNombre().equals(nombreAutor) && libro instanceof LibrosImpresos)
                 .count();
 
-        int cantidadDigitales = (int) libros.stream()
+        int cantidadDigitales = (int) librosDigitalesList.stream()
                 .filter(libro -> libro.getAutor().getNombre().equals(nombreAutor) && libro instanceof LibrosDigitales)
                 .count();
 
-        int cantidadCD = (int) libros.stream()
+        int cantidadCD = (int) librosCDList.stream()
                 .filter(libro -> libro.getAutor().getNombre().equals(nombreAutor) && libro instanceof LibrosCD)
                 .count();
 
